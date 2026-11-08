@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rahul E. — Backend Engineer</title>
+<meta name="description" content="Rahul E. — backend engineer working in Java and Spring Boot. Case files: TwinGuard, KeyVault, Farm-E, DecisionTwin, Verdant CRM, Pomelo.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Courier+Prime:wght@400;700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;0,9..144,900;1,9..144,400&family=Special+Elite&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=8">
+<link rel="stylesheet" href="desk.css?v=8">
+<link rel="stylesheet" href="dossier.css?v=8">
+</head>
+<body>
+
+<!-- shared SVG filters: ink speckle for stamps, wobble for hand-drawn lines -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="ink" x="-5%" y="-5%" width="110%" height="110%">
+    <feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="7" result="n"/>
+    <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.7 1.75" result="m"/>
+    <feComposite in="SourceGraphic" in2="m" operator="in" result="speckled"/>
+    <feTurbulence type="fractalNoise" baseFrequency=".05" numOctaves="1" seed="2" result="w"/>
+    <feDisplacementMap in="speckled" in2="w" scale="2.5"/>
+  </filter>
+  <filter id="rough">
+    <feTurbulence type="fractalNoise" baseFrequency=".035" numOctaves="2" seed="4" result="t"/>
+    <feDisplacementMap in="SourceGraphic" in2="t" scale="3.2"/>
+  </filter>
+</svg>
+
+<!-- intro: a cover sheet that tears open -->
+<div class="rip" id="rip" aria-hidden="true">
+  <div class="rip-half rip-l crumpled"><div class="rip-label"><span class="type">CASE FILES · R.E.</span><span class="hand">tear here ✂ — — — —</span></div></div>
+  <div class="rip-half rip-r crumpled"><div class="rip-label right"><span class="type">CONFIDENTIAL-ISH</span><span class="hand">(it opens itself)</span></div></div>
+</div>
+
+<!-- warm lamp light + vignette over the whole desk -->
+<div class="desk-light" aria-hidden="true"></div>
+
+<!-- lamp pull-chain: lights off turns the cursor into a UV torch that reveals invisible ink -->
+<button class="chain" id="chain" aria-pressed="false" aria-label="Pull the lamp chain to switch the lights off or on">
+  <span class="chain-line"></span><span class="chain-bead"></span><span class="chain-tag hand">pull</span>
+</button>
+<div class="dark" id="dark" aria-hidden="true"></div>
+
+<!-- secret tracker -->
+<aside class="tracker" id="tracker" aria-label="Secrets found">
+  <button class="tracker-note" id="tracker-btn" aria-expanded="false" aria-controls="tracker-list">
+    <span class="hand tracker-count">secrets: <b id="found-n">0</b>/7</span>
+    <span class="tally hand" id="tally" aria-hidden="true"></span>
+    <span class="hand tracker-sub">this desk is hiding things…</span>
+  </button>
+  <ol class="tracker-list hand" id="tracker-list" hidden>
+    <li data-s="lamp">it's a little too bright in here</li>
+    <li data-s="ball1">somebody threw away a draft</li>
+    <li data-s="ball2">…and then another one</li>
+    <li data-s="mug">what's under the coffee?</li>
+    <li data-s="redact">declassify every secret</li>
+    <li data-s="peel">stickers are made to be peeled</li>
+    <li data-s="hire">a four-letter word, typed anywhere (ask the dark)</li>
+  </ol>
+</aside>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- unfolded notes and the certificate -->
+<div class="modal" id="modal" hidden>
+  <div class="modal-paper crumpled" id="modal-paper" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <button class="modal-x" id="modal-x" aria-label="Close">✕</button>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<!-- nav: torn strip of masking tape -->
+<header class="nav-wrap">
+  <nav class="nav" data-torn="lr" aria-label="Sections">
+    <a href="#top" class="nav-name">R.E.</a>
+    <a href="#work">case files</a>
+    <a href="#stack">parts bin</a>
+    <a href="#log">receipt</a>
+    <a href="#contact">write to me</a>
+    <button class="sound" id="sound" aria-pressed="true" title="Paper sounds">♪ on</button>
+  </nav>
+</header>
+
+<main id="top">
+
+  <!-- ================= HERO ================= -->
+  <section class="hero">
+    <span class="desk-item pencil" aria-hidden="true"></span>
+    <button class="ball" id="ball1" aria-label="A crumpled paper ball. Uncrumple it"></button>
+    <div class="sheet hero-sheet reveal" style="--r:-1.2deg">
+      <div class="paper crumpled cream" data-torn="tb" data-seed="11">
+        <div class="hero-grid">
+          <div>
+            <p class="type small kicker">FILE No. RE-2026 · BACKEND ENGINEER · CHENNAI, IN</p>
+            <h1 class="hero-name"><span class="typed" data-text="Rahul E.">Rahul E.</span><span class="caret" aria-hidden="true"></span></h1>
+            <p class="hero-role">Java · Spring Boot · systems that <em>hold together</em></p>
+            <p class="hero-lede">3rd-year CS at SRM Easwari. I build backends, and I care more about <span class="hl">why</span> a system holds up than about the fact that it runs: access control that is really enforced, encryption that happens on the client, tests whose trust I can measure.</p>
+            <div class="hero-actions">
+              <a class="btn-tag" href="#work">read the case files ↓</a>
+              <a class="btn-tag kraft" href="https://github.com/eduvanthrahul-afk/Resume/blob/main/output/pdf/E_Rahul_Resume_ATS.pdf" target="_blank" rel="noopener">résumé (pdf) ↗</a>
+            </div>
+          </div>
+          <figure class="polaroid" style="--r:4deg">
+            <span class="tape t1"></span><span class="tape t2"></span>
+            <img src="https://github.com/eduvanthrahul-afk.png?size=360" alt="Rahul's GitHub avatar" width="220" height="220" loading="eager">
+            <figcaption class="hand">me, mid-debug ☕</figcaption>
+          </figure>
+        </div>
+
+        <div class="stamp red hero-stamp" aria-label="Status: open to backend internships">OPEN TO<br>INTERNSHIPS</div>
+        <span class="coffee-ring" aria-hidden="true"></span>
+        <svg class="doodle-arrow" viewBox="0 0 160 90" aria-hidden="true"><path d="M8 70C40 80 90 78 120 40M108 36l14 2-4 14" /></svg>
+        <span class="note hand hero-note" aria-hidden="true">Oracle certified,<br>Java SE 17 ✓</span>
+        <span class="uv uv-hero hand">psst… type h · i · r · e anywhere on this page</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ABOUT: notebook page ================= -->
+  <section class="about">
+    <span class="desk-item ruler" aria-hidden="true"></span>
+    <span class="desk-item clip c1" aria-hidden="true"></span><span class="desk-item clip c2" aria-hidden="true"></span>
+    <div class="sheet reveal" style="--r:.8deg">
+      <div class="paper notebook crumpled" data-torn="b" data-seed="23">
+        <div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <h2 class="hand big">things I believe about backends</h2>
+        <ol class="notebook-list">
+          <li>An auth rule that is not enforced on the server is just a <s>feature</s> suggestion.</li>
+          <li>If the server never sees plaintext, it can't leak plaintext.</li>
+          <li>"All tests pass" means nothing until you know what the tests would have caught.</li>
+          <li>Schemas outlive code. Migrate them like you mean it (Flyway).</li>
+          <li>Write the honest number in the README, even when it is less impressive.</li>
+        </ol>
+        <p class="hand margin-note">← learned most of these the hard way</p>
+        <span class="uv uv-note hand">6. coffee is a dependency, not a preference.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= WORK ================= -->
+  <section id="work" class="work">
+    <div class="mug-spot">
+      <div class="mug-note hand" aria-hidden="true"><span class="peek">psst ↓</span>you found my hiding spot.<br><b>coffee is a P1 dependency.</b></div>
+      <button class="mug" id="mug" aria-label="A coffee mug. Drag it aside, or press Enter to slide it"><span class="steam"></span><span class="steam s2"></span><span class="steam s3"></span></button>
+    </div>
+    <span class="desk-item eraser" aria-hidden="true"></span>
+    <span class="desk-item pin p1" aria-hidden="true"></span><span class="desk-item pin p2" aria-hidden="true"></span>
+    <div class="clipping reveal" style="--r:-1deg">
+      <div class="paper newsprint" data-torn="tblr" data-seed="31">
+        <p class="type small">THE DAILY COMMIT · VOL. II · NOV 2026</p>
+        <h2 class="headline">Six case files, built by hand</h2>
+        <p class="deck">Each one is a different kind of paper, because each was a different kind of problem.</p>
+        <p class="hand open-hint">every file opens: blueprints, evidence, field notes ↓</p>
+      </div>
+    </div>
+
+    <div class="files">
+
+      <!-- TwinGuard: engineering pad -->
+      <article class="sheet file reveal" style="--r:-1.6deg">
+        <span class="binder" aria-hidden="true"></span>
+        <div class="paper graph crumpled" data-torn="t" data-seed="41">
+          <header class="file-head">
+            <p class="type small">CASE 01 · SAFETY</p>
+            <h3 class="file-title">TwinGuard</h3>
+            <p class="file-sub">A release gate for over-the-air car updates.</p>
+          </header>
+          <svg class="tg-chart" viewBox="0 0 420 170" role="img" aria-label="Braking trace: the approved software stops before the obstacle, the update does not">
+            <g class="axis"><path d="M30 150H400M30 150V12"/></g>
+            <text x="34" y="20" class="lbl">speed</text><text x="398" y="164" class="lbl" text-anchor="end">distance →</text>
+            <path class="obst" d="M330 10V150"/><text x="336" y="24" class="lbl red">obstacle</text>
+            <path class="trace v1 draw-on" d="M32 30C140 30 190 34 230 80S300 146 318 148"/>
+            <path class="trace v2 draw-on" d="M32 36C170 36 220 40 262 84S350 140 395 142"/>
+            <text x="120" y="24" class="lbl blue">v1 approved — stops</text>
+            <text x="338" y="128" class="lbl orange">v2 runs past</text>
+          </svg>
+          <div class="stamp red tg-stamp">BLOCKED</div>
+          <p>A media-player update passes all 48 conventional tests, but gives audio the same network priority as radar. Under load, the brakes hear about the obstacle too late. TwinGuard runs v1 and v2 side by side in a simulated car, searches thousands of scenarios, shrinks each failure to the simplest one that still fails, then <strong>measures how far its own verdict can be trusted</strong> by planting bugs and counting catches.</p>
+          <dl class="figures">
+            <div><dt>real code mutants caught</dt><dd>203<small>/314</small></dd></div>
+            <div><dt>designed faults caught</dt><dd>87<small>%</small></dd></div>
+            <div><dt>false alarms</dt><dd>0<small> in 104k</small></dd></div>
+            <div><dt>ACC gap error after calibration</dt><dd>4.4<small> m (was 16.7)</small></dd></div>
+          </dl>
+          <p class="hand annot">honest bit: random testing ties it on bug count. it's in the README.</p>
+          <span class="uv uv-tg hand">the real test: would I ship it to my own car?</span>
+          <ul class="chips"><li>Java 17</li><li>Spring Boot 3</li><li>React</li><li>FMI 2.0</li><li>CARLA</li><li>GitHub Actions</li></ul>
+          <button class="file-open" data-case="twinguard">open the folder</button>
+          <a class="file-link" href="https://github.com/eduvanthrahul-afk/twinguard" target="_blank" rel="noopener">open repo ↗</a>
+        </div>
+      </article>
+
+      <!-- KeyVault: manila folder with redactions -->
+      <article class="sheet file reveal" style="--r:1.4deg">
+        <div class="folder-tab type small" aria-hidden="true">KV-0003</div>
+        <span class="paperclip" aria-hidden="true"></span>
+        <div class="paper manila crumpled" data-seed="53">
+          <header class="file-head">
+            <p class="type small">CASE 02 · SECURITY</p>
+            <h3 class="file-title">KeyVault</h3>
+            <p class="file-sub">A zero-knowledge secrets &amp; API-key manager.</p>
+          </header>
+          <div class="stamp red conf">CONFIDENTIAL</div>
+          <p class="redact-hint hand">hover the black bars to decrypt →</p>
+          <p class="typewritten">Plaintext secrets <span class="redact" tabindex="0">never touch the server</span>. Keys are derived with <span class="redact" tabindex="0">PBKDF2 (100k rounds)</span> and encrypted with <span class="redact" tabindex="0">AES-256-GCM</span> inside the browser or the CLI. The database stores only <span class="redact" tabindex="0">ciphertext, salts and IVs</span>.</p>
+          <ul class="ticks">
+            <li>RBAC per workspace: owner · admin · member · viewer</li>
+            <li>Immutable version history, one-click rollback</li>
+            <li>Scoped machine tokens for CI pipelines</li>
+            <li><code>kv-cli run --env prod -- npm start</code> injects secrets in memory, so no <code>.env</code> file is ever written to disk</li>
+            <li>Audit trail, rate limiting, token blacklist, expiry e-mails</li>
+          </ul>
+          <ul class="chips"><li>Spring Boot 3.2</li><li>Java 17</li><li>MySQL 8</li><li>Web Crypto</li><li>Node CLI</li></ul>
+          <button class="file-open" data-case="keyvault">open the folder</button>
+          <a class="file-link" href="https://github.com/eduvanthrahul-afk/keyvault-secrets-manager" target="_blank" rel="noopener">open repo ↗</a>
+        </div>
+      </article>
+
+      <!-- Farm-E: kraft price tag -->
+      <article class="sheet file reveal" style="--r:-.8deg">
+        <div class="paper kraft crumpled tag" data-seed="67">
+          <span class="tag-hole" aria-hidden="true"></span><span class="string" aria-hidden="true"></span>
+          <header class="file-head">
+            <p class="type small">CASE 03 · MARKETPLACE</p>
+            <h3 class="file-title">Farm-E</h3>
+            <p class="file-sub">Farmers and buyers, without a middleman.</p>
+          </header>
+          <div class="price stamp">₹24<small>/kg</small></div>
+          <svg class="dutch" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="46" class="ring"/><circle cx="60" cy="60" r="46" class="tick"/><path d="M60 60V22" class="hand-line"/><text x="60" y="88" text-anchor="middle">dutch clock</text></svg>
+          <ul class="ticks">
+            <li>Live Dutch-clock auctions over Socket.IO</li>
+            <li>Buyer requirements matched to listings by an <em>explainable</em> score: crop, quantity, price, quality, harvest timing, distance</li>
+            <li>QR "trace passport" for every lot</li>
+            <li>Orders and contracts use MongoDB multi-document transactions</li>
+            <li>Disputes backed by private delivery photos and weight records</li>
+            <li>Google sign-in + rotating HttpOnly refresh cookie</li>
+          </ul>
+          <ul class="chips"><li>React 19</li><li>Express</li><li>MongoDB</li><li>Socket.IO</li><li>Cloudflare R2</li></ul>
+          <button class="file-open" data-case="farme">open the folder</button>
+          <a class="file-link" href="https://github.com/eduvanthrahul-afk/Farm-E" target="_blank" rel="noopener">open repo ↗</a>
+        </div>
+      </article>
+
+      <!-- DecisionTwin: index cards -->
+      <article class="sheet file cards reveal" style="--r:1deg">
+        <div class="card-under c1" aria-hidden="true"></div>
+        <div class="card-under c2" aria-hidden="true"></div>
+        <div class="paper index crumpled" data-seed="79">
+          <header class="file-head">
+            <p class="type small">CASE 04 · SIMULATION</p>
+            <h3 class="file-title">DecisionTwin</h3>
+            <p class="file-sub">Rehearse a business decision before you pay for it.</p>
+          </header>
+          <div class="bars" role="img" aria-label="Three pricing tiers scored by a synthetic customer population">
+            <div><span>₹299</span><i style="--w:82%"></i></div>
+            <div><span>₹499</span><i style="--w:55%"></i></div>
+            <div><span>₹799</span><i style="--w:31%"></i></div>
+          </div>
+          <p>Describe a choice (say, pricing), and a Python engine scores each scenario against a synthetic customer population. An LLM then writes the recommendation and a persona discussion. A Java 21 / Spring Boot control plane owns auth, tenant-scoped decisions and job state, and streams progress over SSE.</p>
+          <p class="hand annot">says clearly on the tin: synthetic data, not real interviews.</p>
+          <ul class="chips"><li>Java 21</li><li>Spring Boot</li><li>Python</li><li>PostgreSQL</li><li>Docker Compose</li><li>CI</li></ul>
+          <button class="file-open" data-case="decisiontwin">open the folder</button>
+          <a class="file-link" href="https://github.com/eduvanthrahul-afk/oiho" target="_blank" rel="noopener">open repo ↗</a>
+        </div>
+      </article>
+
+      <!-- Verdant CRM: carbon-copy invoice -->
+      <article class="sheet file carbon reveal" style="--r:-1.2deg">
+        <div class="carbon-copy" aria-hidden="true"></div>
+        <div class="paper invoice crumpled" data-torn="t" data-seed="83">
+          <header class="file-head">
+            <p class="type small">CASE 05 · OPERATIONS · <span class="red-ink">ORIGINAL</span></p>
+            <h3 class="file-title">Verdant CRM</h3>
+            <p class="file-sub">From first call to final payment, in one system.</p>
+          </header>
+          <table class="inv">
+            <thead><tr><th>#</th><th>stage</th><th>what the system does</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>Lead</td><td>contact log, value estimate, assignment</td></tr>
+              <tr><td>2</td><td>Survey</td><td>site dimensions, technician schedule</td></tr>
+              <tr><td>3</td><td>Quote</td><td>auto margin; <mark>&lt; 15% flagged</mark></td></tr>
+              <tr><td>4</td><td>Project</td><td>milestones, budget, progress</td></tr>
+              <tr><td>5</td><td>Payment</td><td>milestone billing, overdue tracking</td></tr>
+            </tbody>
+          </table>
+          <p>The dashboard opens on one number: <em>revenue asking for attention</em>, the total at risk across delayed projects, unanswered proposals and overdue invoices. Plus ⌘K search and a 360° customer drawer.</p>
+          <ul class="chips"><li>Spring Boot 3</li><li>PostgreSQL 16</li><li>Flyway</li><li>JJWT</li><li>Vanilla JS</li></ul>
+          <button class="file-open" data-case="crm">open the folder</button>
+          <a class="file-link" href="https://github.com/eduvanthrahul-afk/CRM_DEV" target="_blank" rel="noopener">open repo ↗</a>
+        </div>
+      </article>
+
+      <!-- Pomelo: sticker sheet -->
+      <article class="sheet file reveal" style="--r:1.5deg">
+        <div class="paper stickers" data-seed="97">
+          <header class="file-head">
+            <p class="type small">CASE 06 · SHIPPED PRODUCT</p>
+            <h3 class="file-title">Pomelo</h3>
+            <p class="file-sub">A free Windows file converter that real people download.</p>
+          </header>
+          <div class="sticker-row" aria-label="Keyboard shortcuts while dragging a file">
+            <div class="sticker s1"><kbd>Shift</kbd><span>convert</span></div>
+            <div class="sticker s2"><kbd>Ctrl</kbd><span>compress · crop · trim</span></div>
+            <div class="sticker s3"><kbd>Alt</kbd><span>share · move · pin</span></div>
+          </div>
+          <p>Drag a file, tap a key, and a dial of formats opens under your cursor. Drop the file on one, and the new file lands beside the original. FFmpeg and Pandoc run locally. <strong>Nothing is uploaded, ever.</strong> It grew out of OrbitConvert, my earlier C#/WPF version.</p>
+          <div class="peel-spot"><span class="under hand">underneath:<br>FFmpeg + Pandoc doing the heavy lifting</span><button class="sticker round" id="peel" aria-label="Peel the 0 bytes uploaded sticker">0 bytes<br>uploaded</button></div>
+          <ul class="chips"><li>Windows</li><li>.NET</li><li>FFmpeg</li><li>Pandoc</li></ul>
+          <button class="file-open" data-case="pomelo">open the folder</button>
+          <a class="file-link" href="https://pomelo-website-three.vercel.app" target="_blank" rel="noopener">visit site ↗</a>
+          <a class="file-link" href="https://github.com/eduvanthrahul-afk/pomelo/releases/latest" target="_blank" rel="noopener">download ↗</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ================= STACK: label maker ================= -->
+  <section id="stack" class="stack">
+    <button class="ball b2" id="ball2" aria-label="Another crumpled paper ball. Uncrumple it"></button>
+    <span class="desk-item shavings" aria-hidden="true"><i></i><i></i><i></i></span>
+    <h2 class="hand section-title">the parts bin</h2>
+    <div class="dymo-wall">
+      <span class="dymo">JAVA 17</span><span class="dymo green">SPRING BOOT 3</span><span class="dymo green">SPRING SECURITY</span>
+      <span class="dymo blue">POSTGRESQL</span><span class="dymo blue">MYSQL</span><span class="dymo">MONGODB</span>
+      <span class="dymo red">AES-256-GCM</span><span class="dymo red">PBKDF2</span><span class="dymo">JWT · RBAC</span>
+      <span class="dymo blue">FLYWAY</span><span class="dymo">DOCKER</span><span class="dymo green">GITHUB ACTIONS</span>
+      <span class="dymo">JUNIT · MUTATION TESTING</span><span class="dymo blue">PYTHON</span><span class="dymo">NODE.JS</span>
+      <span class="dymo green">REACT</span><span class="dymo">C# · .NET</span><span class="dymo red">COFFEE</span>
+    </div>
+  </section>
+
+  <!-- ================= LOG: receipt + tickets ================= -->
+  <section id="log" class="log">
+    <span class="desk-item stamper" aria-hidden="true"></span>
+    <div class="receipt-wrap reveal" style="--r:-1deg">
+      <div class="receipt" data-torn="b" data-seed="101">
+        <p class="center bold">*** COMMIT &amp; CO. ***</p>
+        <p class="center">github.com/eduvanthrahul-afk</p>
+        <p class="center">CHENNAI · TN · IN</p>
+        <p class="dash"></p>
+        <p class="row"><span>2025-09 JOINED GITHUB</span><span>1.00</span></p>
+        <p class="row"><span>2026-02 KEYVAULT</span><span>1.00</span></p>
+        <p class="row"><span>2026-06 LEETCODE LOG</span><span>400+</span></p>
+        <p class="row"><span>2026-09 VERDANT CRM</span><span>1.00</span></p>
+        <p class="row"><span>2026-10 FARM-E</span><span>1.00</span></p>
+        <p class="row"><span>2026-10 DECISIONTWIN</span><span>1.00</span></p>
+        <p class="row"><span>2026-10 ORBITCONVERT</span><span>1.00</span></p>
+        <p class="row"><span>2026-11 POMELO (SHIPPED)</span><span>1.00</span></p>
+        <p class="row"><span>2026-11 TWINGUARD</span><span>1.00</span></p>
+        <p class="dash"></p>
+        <p class="row"><span>COFFEE</span><span>∞</span></p>
+        <p class="row bold"><span>CONTRIBUTIONS / YR</span><span>760</span></p>
+        <p class="dash"></p>
+        <p class="center">THANK YOU · COME AGAIN</p>
+        <p class="barcode" aria-hidden="true"></p>
+      </div>
+    </div>
+
+    <div class="tickets">
+      <div class="ticket reveal" style="--r:-3deg"><p class="type small">ADMIT ONE · LEETCODE</p><p class="ticket-num">400+</p><p>problems solved</p><span class="stub">No. 0400</span></div>
+      <div class="ticket blue reveal" style="--r:2deg"><p class="type small">ADMIT ONE · CODECHEF</p><p class="ticket-num">1503</p><p>rating</p><span class="stub">No. 1503</span></div>
+      <div class="ticket green reveal" style="--r:-1deg"><p class="type small">CERTIFICATE</p><p class="ticket-num sm">Java SE 17</p><p>Oracle Certified</p><span class="seal" aria-hidden="true">★</span></div>
+    </div>
+  </section>
+
+  <!-- ================= CONTACT: envelope ================= -->
+  <section id="contact" class="contact">
+    <div class="envelope reveal" style="--r:-.6deg">
+      <div class="env-flap" aria-hidden="true"></div>
+      <div class="postage" aria-hidden="true"><span>₹5</span><small>INDIA POST</small></div>
+      <div class="postmark" aria-hidden="true">CHENNAI<br><b>2026</b><br>OPEN</div>
+      <div class="env-body">
+        <p class="type small">TO: whoever is hiring backend interns</p>
+        <h2 class="hand env-title">Got a backend that needs to hold together?</h2>
+        <p>I'm looking for a backend internship. I'm happy to talk Spring Security, schema design, or why your tests might be lying to you.</p>
+        <span class="uv uv-env hand">yes, I read every reply. even the ones that say no.</span>
+        <div class="env-links">
+          <a class="btn-tag" id="plane-btn" href="mailto:eduvanthrahul@gmail.com">✉ eduvanthrahul@gmail.com</a>
+          <a class="btn-tag kraft" href="https://linkedin.com/in/rahul-eduvanth" target="_blank" rel="noopener">LinkedIn ↗</a>
+          <a class="btn-tag kraft" href="https://github.com/eduvanthrahul-afk" target="_blank" rel="noopener">GitHub ↗</a>
+          <a class="btn-tag kraft" href="https://leetcode.com/Rahul_E" target="_blank" rel="noopener">LeetCode ↗</a>
+        </div>
+      </div>
+    </div>
+    <div class="flyer reveal" style="--r:2.5deg">
+      <span class="pin-top" aria-hidden="true"></span>
+      <p class="type small flyer-kicker">NOTICE · PLEASE TAKE ONE</p>
+      <p class="flyer-big">WANTED</p>
+      <p class="flyer-what">a backend internship</p>
+      <p class="hand flyer-desc">reliable · curious · brings own coffee.<br>tear off a tab ↓</p>
+      <div class="tabs">
+        <a class="tab" href="mailto:eduvanthrahul@gmail.com">email</a>
+        <a class="tab" href="https://linkedin.com/in/rahul-eduvanth" target="_blank" rel="noopener">linkedin</a>
+        <a class="tab" href="https://github.com/eduvanthrahul-afk" target="_blank" rel="noopener">github</a>
+        <a class="tab" href="https://leetcode.com/Rahul_E" target="_blank" rel="noopener">leetcode</a>
+        <a class="tab" href="https://github.com/eduvanthrahul-afk/Resume/blob/main/output/pdf/E_Rahul_Resume_ATS.pdf" target="_blank" rel="noopener">résumé</a>
+      </div>
+    </div>
+    <svg class="plane" id="plane" viewBox="0 0 60 40" aria-hidden="true"><path d="M2 20L58 2L40 38L28 24z"/><path d="M58 2L28 24"/></svg>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <p class="hand">printed on 100% recycled pixels · hand-cut in Chennai · © 2026 Rahul E.</p>
+</footer>
+
+<script src="script.js?v=8"></script>
+<script src="desk.js?v=8"></script>
+<script src="cases-code.js?v=8"></script>
+<script src="cases.js?v=8"></script>
+<script src="dossier.js?v=8"></script>
+</body>
+</html>
