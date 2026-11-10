@@ -1,0 +1,163 @@
+/* =========================================================
+   MOTION LAYER — sits on top of the paper desk, changes none of it.
+   Everything here is gated on html.m-js (set by motion.js) and on
+   prefers-reduced-motion, so the desk is intact without either.
+   ========================================================= */
+
+@property --m-sweep { syntax: "<angle>"; inherits: false; initial-value: 360deg; }
+
+@media (prefers-reduced-motion: no-preference) {
+
+  /* ---------- 1. papers are dealt onto the desk, not faded in ---------- */
+  .m-js .reveal.in { animation: m-deal 1.05s cubic-bezier(.2,.75,.25,1) backwards; }
+  @keyframes m-deal {
+    0%   { opacity: 0; transform: translate(var(--fx, 0px), var(--fy, 70px)) rotate(calc(var(--r, 0deg) + var(--fr, -12deg))) scale(1.16); }
+    18%  { opacity: 1; }
+    62%  { transform: translate(0, 0) rotate(calc(var(--r, 0deg) - var(--fr, -12deg) * .12)) scale(1.012); }
+    82%  { transform: rotate(calc(var(--r, 0deg) + var(--fr, -12deg) * .04)) scale(1); }
+    100% { opacity: 1; transform: rotate(var(--r, 0deg)); }
+  }
+  .m-js .hero-sheet { --fx: 0px; --fy: -70vh; --fr: 9deg; }
+  .m-js .about .sheet { --fx: 34vw; --fy: 20px; --fr: 15deg; }
+  .m-js .clipping { --fx: 0px; --fy: -90px; --fr: -7deg; }
+  .m-js .files > .file:nth-child(odd) { --fx: -26vw; --fy: 30px; --fr: -16deg; }
+  .m-js .files > .file:nth-child(even) { --fx: 26vw; --fy: 30px; --fr: 14deg; }
+  .m-js .ticket { --fx: 30vw; --fy: 0px; --fr: 12deg; }
+  .m-js .envelope { --fx: -42vw; --fy: 40px; --fr: -18deg; }
+
+  /* the flyer hangs from its pin, so it swings instead */
+  .m-js .flyer.reveal.in { transform-origin: 50% 18px; animation: m-swing 2.2s cubic-bezier(.3,0,.3,1) backwards; }
+  @keyframes m-swing {
+    0%   { opacity: 0; transform: rotate(calc(var(--r, 0deg) + 26deg)); }
+    10%  { opacity: 1; }
+    30%  { transform: rotate(calc(var(--r, 0deg) - 15deg)); }
+    50%  { transform: rotate(calc(var(--r, 0deg) + 8deg)); }
+    68%  { transform: rotate(calc(var(--r, 0deg) - 4deg)); }
+    84%  { transform: rotate(calc(var(--r, 0deg) + 1.5deg)); }
+    100% { opacity: 1; transform: rotate(var(--r, 0deg)); }
+  }
+
+  /* the receipt feeds out of a printer, line by line */
+  .m-js .receipt-wrap.reveal.in { animation: m-feed 2.3s steps(28, end) backwards; }
+  @keyframes m-feed {
+    from { opacity: 1; transform: rotate(var(--r, 0deg)); clip-path: inset(0 -60px 100% -60px); }
+    to   { opacity: 1; transform: rotate(var(--r, 0deg)); clip-path: inset(0 -60px -80px -60px); }
+  }
+
+  /* ---------- 2. stamps come down hard ---------- */
+  .m-js .reveal.in .stamp { transition: none; animation: m-slam .5s var(--sd, 1s) cubic-bezier(.2,0,.1,1) backwards; }
+  .m-js .reveal.in .postmark { animation: m-slam .45s 1.7s cubic-bezier(.2,0,.1,1) backwards; }
+  @keyframes m-slam {
+    0%   { scale: 3.4; opacity: 0; }
+    54%  { scale: .9; opacity: 1; }
+    74%  { scale: 1.04; }
+    100% { scale: 1; }
+  }
+  .m-ink {
+    position: absolute; z-index: 5; pointer-events: none; border-radius: 50%;
+    border: 2px solid currentColor; opacity: 0; mix-blend-mode: multiply;
+    animation: m-ink .7s ease-out forwards;
+  }
+  @keyframes m-ink { from { opacity: .55; scale: .5; } to { opacity: 0; scale: 1.9; } }
+  .m-js .reveal.in .postage { animation: m-stick .55s 1.15s cubic-bezier(.3,1.5,.5,1) backwards; }
+  @keyframes m-stick { from { scale: 1.7; rotate: -22deg; opacity: 0; } }
+
+  /* ---------- 3. handwriting writes itself ---------- */
+  .m-js .reveal .hero-note, .m-js .reveal .margin-note, .m-js .reveal .annot,
+  .m-js .reveal .open-hint, .m-js .reveal .redact-hint, .m-js .reveal .flyer-desc,
+  .m-js .reveal .notebook .big, .m-js .reveal .env-title,
+  .m-js .m-wait.section-title { clip-path: inset(-25% 105% -25% -8%); }
+  .m-js .reveal.in .hero-note, .m-js .reveal.in .margin-note, .m-js .reveal.in .annot,
+  .m-js .reveal.in .open-hint, .m-js .reveal.in .redact-hint, .m-js .reveal.in .flyer-desc,
+  .m-js .reveal.in .notebook .big, .m-js .reveal.in .env-title,
+  .m-js .m-go.section-title {
+    clip-path: inset(-25% -8% -25% -8%);
+    transition: clip-path 1.1s var(--wd, 1.25s) cubic-bezier(.35,0,.3,1);
+  }
+  .m-js .reveal.in .notebook .big { --wd: .7s; }
+  .m-js .reveal.in .hero-note { --wd: 2.5s; }
+  .m-js .reveal.in .margin-note { --wd: 4.3s; }
+  .m-js .reveal.in .env-title { --wd: .9s; }
+  .m-js .m-go.section-title { --wd: .1s; }
+
+  .m-js .reveal .notebook-list li { clip-path: inset(-10% 100% -10% -34px); }
+  .m-js .reveal.in .notebook-list li { clip-path: inset(-10% -4% -10% -34px); transition: clip-path .85s calc(1.4s + var(--li, 0) * .55s) cubic-bezier(.35,0,.3,1); }
+  .m-js .notebook-list li:nth-child(2) { --li: 1; } .m-js .notebook-list li:nth-child(3) { --li: 2; }
+  .m-js .notebook-list li:nth-child(4) { --li: 3; } .m-js .notebook-list li:nth-child(5) { --li: 4; }
+
+  /* the pen circles "why", the arrow gets drawn, the mug leaves its ring */
+  .m-js .reveal .hl::after { --m-sweep: 0deg; }
+  .m-js .hl::after { -webkit-mask: conic-gradient(from -60deg, #000 var(--m-sweep), transparent 0); mask: conic-gradient(from -60deg, #000 var(--m-sweep), transparent 0); }
+  .m-js .reveal.in .hl::after { --m-sweep: 360deg; transition: --m-sweep .75s 2.1s cubic-bezier(.4,0,.2,1); }
+  .m-js .reveal .doodle-arrow path { stroke-dasharray: 1; stroke-dashoffset: 1; }
+  .m-js .reveal.in .doodle-arrow path { stroke-dashoffset: 0; transition: stroke-dashoffset .9s 2.2s cubic-bezier(.4,0,.2,1); }
+  .m-js .reveal.in .coffee-ring { animation: m-ring 1.6s 2.9s ease-out backwards; }
+  @keyframes m-ring { from { opacity: 0; scale: .82; filter: url(#rough) blur(5px); } }
+
+  /* ---------- 4. the polaroid drops in and develops ---------- */
+  .m-js .reveal.in .polaroid { animation: m-drop .75s 1.15s cubic-bezier(.3,1.35,.5,1) backwards; }
+  @keyframes m-drop { from { opacity: 0; translate: 30px -70px; rotate: 16deg; scale: 1.15; } }
+  .m-js .reveal.in .polaroid img { animation: m-develop 3.6s 1.5s ease-out backwards; }
+  @keyframes m-develop {
+    0%   { filter: sepia(1) brightness(2.8) contrast(.25) blur(4px); }
+    45%  { filter: sepia(.8) brightness(1.7) contrast(.6) blur(1.5px); }
+    100% { filter: sepia(.2) contrast(1.05) saturate(.9); }
+  }
+  .m-js .reveal.in .polaroid .tape { animation: m-tape-on .35s 1.8s cubic-bezier(.3,1.6,.5,1) backwards; }
+  .m-js .reveal.in .polaroid .t2 { animation-delay: 1.95s; }
+  @keyframes m-tape-on { from { opacity: 0; scale: 1.6; } }
+
+  /* ---------- 5. the nav tape gets stuck down ---------- */
+  .m-js .nav { animation: m-nav .7s 2s cubic-bezier(.3,1.4,.5,1) backwards; }
+  @keyframes m-nav { from { translate: 0 -90px; rotate: -7deg; } }
+
+  /* ---------- 6. label maker punches the parts bin out one label at a time ---------- */
+  .m-js .dymo-wall.m-wait .dymo { opacity: 0; }
+  .m-js .dymo-wall.m-go .dymo { animation: m-punch .5s calc(var(--i, 0) * 60ms) cubic-bezier(.3,1.6,.5,1) backwards; }
+  @keyframes m-punch { from { opacity: 0; scale: .25; translate: -30px -22px; rotate: -14deg; } }
+
+  /* ---------- 8. TwinGuard: the chart is plotted live ---------- */
+  .m-js .tg-chart .draw-on.v1 { transition: none !important; }
+  .m-js .in .draw-on.v2 { animation: none; }
+  .m-head { stroke: var(--ink); stroke-width: 1.5; opacity: 0; transition: fill .2s; }
+  .m-head.on { opacity: 1; }
+  .m-js .tg-chart .obst.m-hit { animation: m-hit .7s ease-out; }
+  @keyframes m-hit { 0% { stroke-width: 9; } 100% { stroke-width: 2; } }
+}
+
+/* ---------- 9. red string from pin to pin across the case files ---------- */
+.m-js .files { position: relative; }
+.m-string { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; z-index: 6; pointer-events: none; }
+.m-string path.shade { stroke: rgba(0,0,0,.38); stroke-width: 3.4; transform: translate(1.5px, 4.5px); }
+.m-string path { fill: none; stroke: #b3261e; stroke-width: 2.6; stroke-linecap: round; }
+.m-string path.fibre { stroke: #e2766c; stroke-width: .8; stroke-dasharray: 3 5; }
+.m-pin {
+  position: absolute; z-index: 7; top: 10px; right: 14px; width: 20px; height: 20px; border-radius: 50%; pointer-events: none;
+  background: radial-gradient(circle at 35% 30%, #ff9c8f, #d6332a 55%, #7b120c);
+  box-shadow: 2px 5px 4px rgba(0,0,0,.45);
+  scale: 0; transition: scale .35s cubic-bezier(.3,1.9,.5,1);
+}
+.m-pin.on { scale: 1; }
+.files > .file:nth-child(even) .m-pin { right: auto; left: 14px; }
+.files > .file:nth-child(3) .m-pin { right: 19%; top: 8px; }
+.files > .file.cards .m-pin { left: 26px; top: 22px; }
+@media (max-width: 900px) { .m-string, .m-pin { display: none; } }
+
+/* ---------- 10. dust in the lamplight ---------- */
+.m-dust { position: fixed; top: 0; right: 0; width: 62vw; height: 78vh; z-index: 46; pointer-events: none; transition: opacity .45s; }
+body.lights-off .m-dust, html.dossier-open .m-dust { opacity: 0; }
+
+/* torn fibres that fly off the cover sheet when it rips */
+.m-fleck { position: fixed; z-index: 101; pointer-events: none; background: #c69a64; }
+
+/* ---------- 11. nav marker ---------- */
+.nav { position: relative; }
+.m-nav-ink {
+  position: absolute; left: 0; top: 0; height: 3px; width: 0; border-radius: 2px; background: var(--red); opacity: 0; pointer-events: none;
+  transition: transform .55s cubic-bezier(.3,1.35,.4,1), width .45s cubic-bezier(.3,1,.4,1), opacity .3s;
+}
+
+/* ---------- 12. papers get their own layer while they are still waiting to be dealt ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  .m-js .reveal:not(.in) { will-change: transform, opacity; }
+}

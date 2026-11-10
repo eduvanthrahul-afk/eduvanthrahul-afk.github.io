@@ -1,0 +1,52 @@
+/* =========================================================
+   PLAY LAYER — three case files you can actually operate.
+   ========================================================= */
+.pl-try { font: 600 1.3rem/1.15 var(--hand); color: var(--red); margin: 6px 0 2px !important; transform: rotate(-1deg); }
+.pl-out, .file p.pl-out { font: 600 1.25rem/1.2 var(--hand); color: var(--blue); margin: 4px 0 0 !important; min-height: 2.4em; }
+.pl-out.bad, .file p.pl-out.bad { color: var(--red); }
+.pl-out.good, .file p.pl-out.good { color: var(--green); }
+.pl-fine, .file p.pl-fine { font: .72rem/1.4 var(--mono); color: var(--ink-soft); margin: 4px 0 0 !important; }
+
+/* stamps re-slam when their verdict changes */
+.stamp.pl-slam, .m-js .reveal.in .stamp.pl-slam { animation: sc-slam .45s cubic-bezier(.2,0,.1,1); }
+.stamp.pl-pass { color: var(--green); }
+
+/* ---------- TwinGuard: a pencil-line slider ---------- */
+.pl-tg { margin: 2px 0 10px; }
+.pl-tg label { display: flex; justify-content: space-between; gap: 12px; font: 600 1.3rem/1.2 var(--hand); color: var(--ink); }
+.pl-tg label b { color: var(--orange); }
+.pl-range {
+  -webkit-appearance: none; appearance: none; display: block; width: 100%; height: 26px; margin: 2px 0 0; background: transparent;
+  background-image: linear-gradient(var(--ink), var(--ink)), repeating-linear-gradient(90deg, var(--ink) 0 1.5px, transparent 1.5px 10%);
+  background-size: 100% 2px, 100% 9px; background-position: 0 50%, 0 50%; background-repeat: no-repeat;
+}
+.pl-range::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%; border: 0;
+  background: radial-gradient(circle at 35% 30%, #ffd08a, #c9741c 55%, #6b3a08); box-shadow: 1px 3px 3px rgba(0,0,0,.45);
+}
+.pl-range::-moz-range-thumb {
+  width: 22px; height: 22px; border-radius: 50%; border: 0;
+  background: radial-gradient(circle at 35% 30%, #ffd08a, #c9741c 55%, #6b3a08); box-shadow: 1px 3px 3px rgba(0,0,0,.45);
+}
+.pl-range::-moz-range-track { background: transparent; }
+
+/* ---------- KeyVault: a typewritten field and what the server gets ---------- */
+.pl-kv { margin: 12px 0 6px; padding-top: 10px; border-top: 1.5px dashed rgba(0,0,0,.3); }
+.pl-type {
+  display: block; width: 100%; margin: 2px 0 12px; padding: 4px 2px; border: 0; border-bottom: 2px solid var(--ink); border-radius: 0;
+  background: transparent; color: var(--ink); font: 1rem/1.4 var(--type); outline-offset: 4px;
+}
+.pl-kv-l { margin: 0 0 4px !important; color: var(--ink-soft); }
+.pl-cipher {
+  margin: 0 !important; padding: 6px 8px; background: #111; color: #cfe9d6; border-radius: 1px;
+  font: .78rem/1.5 var(--mono) !important; word-break: break-all; min-height: 3.6em;
+}
+.pl-cipher b { color: #f7e26b; font-weight: 400; }
+
+/* ---------- Farm-E: the clock is a button ---------- */
+.dutch.pl-live { pointer-events: auto; transition: scale .2s; }
+.dutch.pl-live:hover { scale: 1.08; }
+.dutch.pl-live:focus-visible { outline: 2px dashed var(--red); outline-offset: 4px; border-radius: 50%; }
+.dutch.pl-stopped .tick, .dutch.pl-stopped .hand-line { animation-play-state: paused; }
+.kraft .pl-out { padding-right: 112px; }
+@media (max-width: 640px) { .kraft .pl-out { padding-right: 0; } }

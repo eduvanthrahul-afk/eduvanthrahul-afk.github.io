@@ -1,0 +1,73 @@
+/* =========================================================
+   SCRIBBLE LAYER — visitors can draw on the desk, and the desk
+   already has a few chalk doodles of its own.
+   ========================================================= */
+
+/* ---------- the drawing surface (covers the whole document, scrolls with it) ---------- */
+.sc-layer { position: absolute; left: 0; top: 0; width: 100%; height: 0; overflow: visible; z-index: 40; pointer-events: none; }
+.sc-layer.hi { mix-blend-mode: multiply; }
+.sc-layer path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.sc-stamps { position: absolute; left: 50%; top: 0; width: 0; height: 0; z-index: 41; pointer-events: none; }
+.sc-stamp { position: absolute; translate: -50% -50%; font-size: 1.5rem; padding: 6px 16px; border-width: 4px; white-space: nowrap; mix-blend-mode: normal; }
+.sc-stamp.new { animation: sc-slam .45s cubic-bezier(.2,0,.1,1) backwards; }
+@keyframes sc-slam { 0% { scale: 3.2; opacity: 0; } 55% { scale: .9; opacity: 1; } 75% { scale: 1.05; } 100% { scale: 1; } }
+
+html.sc-on .sc-layer.pen { pointer-events: auto; touch-action: none; }
+html.sc-on.sc-stamping .sc-layer.pen { cursor: crosshair; }
+html.sc-on body { user-select: none; -webkit-user-select: none; }
+html.dossier-open .sc-tray { display: none; }
+
+/* ---------- the pen tray ---------- */
+.sc-tray { position: fixed; right: 18px; bottom: 18px; z-index: 86; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+.sc-toggle {
+  border: 0; padding: 8px 18px 9px; font-size: 1.45rem; line-height: 1; color: var(--ink);
+  background: linear-gradient(180deg, rgba(240,226,184,.97), rgba(226,208,160,.97));
+  clip-path: polygon(0 8%, 3% 0, 7% 9%, 12% 0, 100% 0, 97% 20%, 100% 45%, 97% 70%, 100% 100%, 5% 100%, 2% 88%, 0 72%, 3% 50%, 0 30%);
+  filter: drop-shadow(0 3px 4px rgba(0,0,0,.4));
+  transform: rotate(-2deg); transition: transform .2s;
+}
+.sc-toggle:hover { transform: rotate(0deg) scale(1.05); color: var(--red); }
+.sc-tools { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 7px; max-width: 300px; }
+.sc-tools[hidden] { display: none; }
+.sc-tool {
+  border: 0; padding: 5px 13px 7px; font: 600 1.3rem/1 var(--hand); color: var(--ink);
+  background: #fbf6ea; box-shadow: 0 2px 5px rgba(0,0,0,.45); border-radius: 2px;
+  transition: transform .15s; animation: sc-pop .3s calc(var(--i, 0) * 40ms) cubic-bezier(.3,1.6,.5,1) backwards;
+}
+@keyframes sc-pop { from { opacity: 0; scale: .4; translate: 0 14px; } }
+.sc-tool:nth-child(odd) { transform: rotate(-2.5deg); } .sc-tool:nth-child(even) { transform: rotate(2deg); }
+.sc-tool:hover { transform: rotate(0deg) translateY(-2px); }
+.sc-tool[aria-pressed=true] { background: #f7e26b; box-shadow: 0 2px 5px rgba(0,0,0,.45), inset 0 -3px 0 var(--red); }
+.sc-tool[data-tool=pencil] { border-left: 7px solid #3b3b3b; }
+.sc-tool[data-tool=marker] { border-left: 7px solid #f2d13c; }
+.sc-tool[data-tool=red] { border-left: 7px solid var(--red); }
+.sc-tool[data-tool=stamp] { border-left: 7px double var(--red); color: var(--red); }
+.sc-tool[data-act] { background: #c69a64; }
+
+/* ---------- chalk doodles already on the desk ---------- */
+.sc-doodle { position: absolute; z-index: 0; pointer-events: none; color: #efe6cf; opacity: .72; font: 600 1.7rem/1.05 var(--hand); }
+.sc-doodle svg { display: block; overflow: visible; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; filter: url(#rough); }
+.sc-doodle svg path, .sc-doodle svg circle, .sc-doodle svg ellipse { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset .7s calc(var(--d, 0) * 1s) cubic-bezier(.4,0,.2,1); }
+.sc-doodle.on svg path, .sc-doodle.on svg circle, .sc-doodle.on svg ellipse { stroke-dashoffset: 0; }
+.sc-doodle span { display: block; clip-path: inset(-20% 105% -20% -5%); transition: clip-path .9s calc(var(--d, 0) * 1s) cubic-bezier(.35,0,.3,1); }
+.sc-doodle.on span { clip-path: inset(-20% -5% -20% -5%); }
+.sc-doodle .win { stroke: #ff8a7a; stroke-width: 3.2; }
+
+.sc-d-rules { left: 14px; top: 110px; width: 300px; transform: rotate(-5deg); }
+.sc-d-ttt { left: 56px; top: 86px; width: 104px; transform: rotate(-8deg); }
+.sc-d-coffee { right: 64px; bottom: 2px; width: 230px; transform: rotate(-3deg); font-size: 1.45rem; text-align: right; }
+.sc-d-ok { left: -196px; top: 210px; width: 170px; transform: rotate(-9deg); font-size: 2rem; text-align: center; }
+.sc-d-draw { right: 10px; bottom: -6px; width: 230px; transform: rotate(3deg); font-size: 1.5rem; text-align: right; }
+
+@media (max-width: 1499px) { .sc-d-ok { display: none; } }
+@media (max-width: 1180px) { .sc-d-coffee { display: none; } }
+@media (max-width: 1060px) { .sc-doodle { display: none; } }
+@media (max-width: 640px) {
+  .sc-tray { right: 10px; bottom: 10px; }
+  .sc-toggle { font-size: 1.15rem; padding: 6px 12px 7px; }
+  .sc-tool { font-size: 1.1rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sc-doodle svg path, .sc-doodle svg circle, .sc-doodle svg ellipse { stroke-dashoffset: 0; }
+  .sc-doodle span { clip-path: none; }
+}
